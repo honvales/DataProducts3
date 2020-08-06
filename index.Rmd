@@ -1,0 +1,67 @@
+---
+title: "My Climbing Stats"
+author: "Honorio Valdes"
+date: "8/5/2020"
+output: ioslides_presentation
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+library(plotly)
+```
+
+## Introduction
+
+- Continuing with the last project theme, I will do a quick analysis of my climbing stats
+- I will look at the distribution of 2 variables: elevation (how tall a peak is) and prominence (height of a peak relative to its surroundings) using a histogram
+- Both histograms shown in this project were made using Plotly (code is included on the slides) and can be found on slides 7 and 8
+
+## Climbing is fun!
+
+![On the summit of Big Snagtooth](~/Desktop/Data Science Stuff/Coursera Data Science/Data Science Specialization/Developing Data Products/Project 3/Snaggy.jpg){width=600, height=450}
+
+## Data summary
+
+```{r data, echo=FALSE}
+mydata <- read.csv('honorio_peak_data.csv')
+summary(mydata)
+el <- mydata[,'elevation']
+pr <- mydata[,'prominence']
+```
+
+## Where have I attained summits 
+
+- The map in the following slide was made using the code from the previous assignment
+- Code available in https://github.com/honvales/DataProductsProject2
+
+## Summit map
+
+```{r map, message=TRUE, warning=FALSE}
+library(leaflet)
+library(leaflet.providers)
+df <- data.frame(latitude=mydata[,1], longitude=mydata[,2])
+
+mydata %>% 
+  leaflet() %>% 
+  addTiles() %>% 
+  addProviderTiles(providers$OpenTopoMap, group='Topo') %>%
+  addMarkers(popup=mydata[,3],clusterOptions=markerClusterOptions())
+
+```
+
+## Elevation histogram (in ft)
+
+```{r elevation, echo=TRUE, message=TRUE, warning=FALSE}
+plot_ly(x = el, type='histogram')
+```
+
+## Prominence histogram (in ft)
+
+```{r prominence, echo=TRUE}
+plot_ly(x = pr, type='histogram')
+```
+
+## Conclusions
+
+- Most of the peaks that I have climbed have elevations above 8000 ft or below 1000 ft (thanks COVID)
+- Most of the peaks that I climb have a prominence below 1000 ft
